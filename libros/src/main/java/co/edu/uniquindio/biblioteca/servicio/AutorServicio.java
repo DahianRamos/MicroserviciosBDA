@@ -22,19 +22,19 @@ public class AutorServicio {
     }
 
     public Autor findById(Long id) {
-        return autorRepo.findById(id).orElseThrow(() -> new AutorNoEncontradoException("AuthorController not found"));
+        return autorRepo.findById(id).orElseThrow(() -> new AutorNoEncontradoException("AutorController not found"));
     }
 
     public List<AutorDTO> findAll() {
         return autorRepo.findAll().stream().map(author -> autorUtils.convertirAutorDTO(author)).collect(Collectors.toList());
     }
 
-    public Autor save(Autor author) {
-        return autorRepo.save(author);
+    public Autor save(Autor autor) {
+        return autorRepo.save(autor);
     }
 
-    public Autor update(Long id, Autor author) {
-        autorRepo.findById(id).orElseThrow(() -> new AutorNoEncontradoException("AuthorController not found"));
-        return autorRepo.save(author);
+    public Autor update(Long id, Autor autor) {
+        autorRepo.findById(id).orElseThrow(() -> new AutorNoEncontradoException("AutorController not found"));
+        return autorRepo.save(autor);
     }
 }

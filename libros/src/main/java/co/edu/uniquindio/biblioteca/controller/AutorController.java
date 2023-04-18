@@ -8,38 +8,40 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/author")
+@RequestMapping("/api/autor")
 @AllArgsConstructor
 public class AutorController {
     private final AutorServicio autorServicio;
 
-    @DeleteMapping("/{authorId}")
-    public ResponseEntity<Respuesta<String>> deleteAuthor(@PathVariable long authorId) {
-        autorServicio.delete(authorId);
+    @DeleteMapping("/{autorId}")
+    public ResponseEntity<Respuesta<String>> delete(@PathVariable long autorId) {
+        autorServicio.delete(autorId);
         return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("El autor se elimino correctamente"));
     }
 
     @GetMapping
-    public ResponseEntity<Respuesta<List<AutorDTO>>> findAllAuthors() {
+    public ResponseEntity<Respuesta<List<AutorDTO>>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("Autores encontrados", autorServicio.findAll()));
     }
 
-    @GetMapping("/{authorId}")
-    public ResponseEntity<Respuesta<Autor>> findAuthorById(@PathVariable Long authorId) {
-        return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("Autor encontrado", autorServicio.findById(authorId)));
+    @GetMapping("/{autorId}")
+    public ResponseEntity<Respuesta<Autor>> findById(@PathVariable Long autorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("Autor encontrado", autorServicio.findById(autorId)));
     }
 
     @PostMapping
-    public ResponseEntity<Respuesta<Autor>> saveAuthor(@RequestBody Autor author) {
-        return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("Autor creado correctamente", autorServicio.save(author)));
+    public ResponseEntity<Respuesta<Autor>> save(@RequestBody Autor autor) {
+        return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("Autor creado correctamente", autorServicio.save(autor)));
     }
 
-    @PutMapping("/{authorId}")
-    public ResponseEntity<Respuesta<Autor>> updateAuthor(@PathVariable Long authorId, @RequestBody Autor author) {
-        return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("El Autor se actualizo correctamente", autorServicio.update(authorId, author)));
+    @PutMapping("/{autorId}")
+    public ResponseEntity<Respuesta<Autor>> update(@PathVariable Long autorId, @RequestBody Autor autor) {
+        return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("El Autor se actualizo correctamente", autorServicio.update(autorId, autor)));
     }
+
+
+
 }
