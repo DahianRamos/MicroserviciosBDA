@@ -97,7 +97,7 @@ public class PrestamoServicio {
         try {
 
             Respuesta<ClienteGetDTO> respuesta = restTemplate.exchange(
-                    "http://localhost:8081/api/cliente/" + codigoCliente,
+                    "http://CLIENTE-SERVICE/api/cliente/" + codigoCliente,
                     HttpMethod.GET,
                     null,
                     new ParameterizedTypeReference<Respuesta<ClienteGetDTO>>() {}).getBody();
@@ -105,6 +105,7 @@ public class PrestamoServicio {
             return respuesta.getDato();
 
         }catch (Exception e){
+            e.printStackTrace();
             throw new RuntimeException("Hubo un error recuperando la información del cliente");
         }
     }
