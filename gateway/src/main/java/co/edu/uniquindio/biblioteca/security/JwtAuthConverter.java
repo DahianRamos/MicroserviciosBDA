@@ -15,10 +15,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 @Component
 public class JwtAuthConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
-    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new
-            JwtGrantedAuthoritiesConverter();
+    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
     @Value("${jwt.auth.converter.resource-id}")
     private String resourceId;
     @Value("${jwt.auth.converter.principal-attribute}")
