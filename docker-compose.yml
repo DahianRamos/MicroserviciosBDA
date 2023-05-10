@@ -1,5 +1,9 @@
 version: '3.1'
 
+volumes:
+  keycloak_data:
+
+
 services:
 
   db:
@@ -10,7 +14,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: laura
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - './volumenes/postgres:/var/lib/mysql'
     hostname: server-mysql
@@ -50,6 +54,8 @@ services:
     ports:
       - "8761:8761"
 
+
+
   clientes:
     image: cliente-service
     restart: always
@@ -70,20 +76,18 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/libros?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=laura
+      - SPRING_DATASOURCE_PASSWORD=root
       - eureka.client.service-url.defaultZone=http://eureka:8761/eureka
-
-  prestamos:
-    image: prestamo-service
-    restart: always
-    depends_on:
-    - db
-    - eureka
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.0.2
+    command: start-dev
+    volumes:
+      - keycloak_data:/opt/keycloak/data/
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/prestamos?createDatabaseIfNotExist=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=laura
-      - eureka.client.service-url.defaultZone=http://eureka:8761/eureka
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 9090:8080
 
   gateway:
    image: gateway-service
@@ -93,7 +97,6 @@ services:
      - eureka
      - clientes
      - libros
-     - prestamos
    environment:
      - eureka.client.service-url.defaultZone=http://eureka:8761/eureka
    ports:

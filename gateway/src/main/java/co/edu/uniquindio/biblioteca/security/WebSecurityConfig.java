@@ -1,5 +1,6 @@
 package co.edu.uniquindio.biblioteca.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -14,26 +15,28 @@ public class WebSecurityConfig {
 
     public static final String ADMIN = "admin";
     public static final String USER = "user";
-    private final JwtAuthConverter jwtAuthConverter;
 
-    public WebSecurityConfig(JwtAuthConverter jwtAuthConverter) {
-        this.jwtAuthConverter = jwtAuthConverter;
-    }
+    @Autowired
+    private JwtAuthConverter jwtAuthConverter;
+
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
 
-
-        http.authorizeExchange( e ->
-                        e.pathMatchers("/api/test/anonymous").permitAll()
-                                .pathMatchers("/api/test/admin").hasRole(ADMIN)
-                                .pathMatchers("/api/test/user").hasAnyRole(ADMIN, USER)
-                                .anyExchange().authenticated());
-
+        http.authorizeExchange(exchanges ->
+                exchanges.pathMatchers("/api/libros/**", "/api/clientes/**")
+                        .hasRole("admin")
+                        .pathMatchers("/api/prestamos/**")
+                        .hasAnyRole("admin", "user")
+                        .anyExchange()
+                        .authenticated());
 
         http.oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthConverter);
+
+        //Deshabilita la protección CSRF con la siguiente línea:
         http.csrf().disable();
+
         return http.build();
     }
 }
